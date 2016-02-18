@@ -2,6 +2,7 @@
 using System.Collections;
 using LitJson;
 using UnityEngine.UI;
+using System.Threading;
 
 public class MainListView : MonoBehaviour {
 
@@ -10,7 +11,13 @@ public class MainListView : MonoBehaviour {
 	private Text textExample;
 	private GameObject selectButtonExample;
 	private ReadJson readJson;
-
+	private long wakeTimeStamp = 0;
+	private bool isWaiting = false;
+	private bool isDelay = false;
+	private bool isFinish = false;
+	private long delayTime = 0;
+	private long wakeTime = 0;
+	
 	private void initExampleGameObject(){
 		mainListView = GameObject.Find("MainActivity/MainListView");
 		mainListViewGrid = GameObject.Find("MainActivity/MainListView/Grid");
@@ -24,6 +31,9 @@ public class MainListView : MonoBehaviour {
 			addTextItem (di);
 		} else {
 			addSelectButton(di);
+		}
+		if (di.getDelay () > 0) {
+			Utils.saveWakeTimeStamp(di.getDelay ());
 		}
 	}
 
@@ -54,29 +64,53 @@ public class MainListView : MonoBehaviour {
 	private void clickButton(GameObject selectButton, Option op){
 		selectButton.transform.GetChild (0).GetComponent<Button> ().enabled = false;
 		selectButton.transform.GetChild (1).GetComponent<Button> ().enabled = false;
+		isWaiting = false;
+		if (op.getDelay () > 0) {
+			isDelay = true;
+			delayTime = op.getDelay ();
+			wakeTime = Utils.saveWakeTimeStamp(op.getDelay ());
+		}
 		Debug.Log (op.getOption() + "|" + op.getSubfield());
 	}
 
 	// Use this for initialization
 	void Start () {
 		initExampleGameObject ();
+		InvokeRepeating("loadDialogInvoke", 1, 1f); //time, 1s later, 1s repeat
 		readJson = new ReadJson ();
-		Debug.Log (readJson.getCurDialogInfo ().ToString());
-		addItem (readJson.getCurDialogInfo ());
-		readJson.next ();
-		Debug.Log (readJson.getCurDialogInfo ().ToString());
-		addItem (readJson.getCurDialogInfo ());
-		readJson.next ();
-		Debug.Log (readJson.getCurDialogInfo ().ToString());
-		addItem (readJson.getCurDialogInfo ());
-		readJson.next ();
-		Debug.Log (readJson.getCurDialogInfo ().ToString());
 		addItem (readJson.getCurDialogInfo ());
 		Debug.Log ("start over");
 	}
 
 	// Update is called once per frame
 	void Update () {
+	}
+
+	void loadDialogInvoke() {
+		delayTime = readJson.getCurDialogInfo ().getDelay ();
+		if (delayTime > 0 && !isDelay) {
+			wakeTime = Utils.saveWakeTimeStamp(delayTime);
+		}
+		if (Utils.getTimeStampNow () >= wakeTime) {
+			isDelay = false;
+		} else {
+			isDelay = true;
+		}
+		isFinish = readJson.isFinish ();
+		if (isFinish) {
+			CancelInvoke ("loadDialogInvoke");
+			Debug.Log ("CancelInvoke");
+		} else {
+			if (!isWaiting && !isDelay) {
+				readJson.next ();
+				addItem (readJson.getCurDialogInfo ());
+				if (readJson.getCurDialogInfo ().getType () == DialogType.Select) {
+					isWaiting = true;
+				}
+			}
+		}
+//		Rigidbody instance = Instantiate(projectile);
+//		instance.velocity = Random.insideUnitSphere * 5;
 	}
 
 }

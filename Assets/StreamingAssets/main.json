@@ -5,6 +5,7 @@
             "type": 0,
             "id": 0,
             "content": "哎呀我操你谁？",
+            "voice": "111.mp3",
             "delay": 1000
         },
         {

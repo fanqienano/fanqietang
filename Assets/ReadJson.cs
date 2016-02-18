@@ -48,16 +48,16 @@ public class ReadJson {
 		JsonData jdDialog = this.curJson ["data"][this.curId];
 		DialogInfo di = new DialogInfo ();
 		di.setId (this.curId);
-		if ((int)jdDialog ["type"] == 1) {
+		if (int.Parse(jdDialog ["type"].ToString()) == 1) {
 			di.setType (DialogType.Select);
 			JsonData jdo = jdDialog["select"];
 			for (int i=0;i<jdo.Count;i++){
 				Option op = new Option();
 				op.setSubfield(jdo[i]["subfield"].ToString());
-				op.setTarId((int) jdo[i]["tarId"]);
+				op.setTarId(int.Parse(jdo[i]["tarId"].ToString()));
 				op.setOption(jdo[i]["option"].ToString());
 				try{
-					op.setDelay((long)jdo[i]["delay"]);
+					op.setDelay(long.Parse(jdo[i]["delay"].ToString()));
 				}catch(Exception ex){
 					op.setDelay(0);
 				}
@@ -66,9 +66,14 @@ public class ReadJson {
 		} else {
 			di.setType (DialogType.Dialog);
 			di.setContent (jdDialog ["content"].ToString());
+			try{
+				di.setVoice(Utils.getVoicePath(jdDialog["voice"].ToString()));
+			}catch(Exception ex){
+				di.setVoice(string.Empty);
+			}
 		}
 		try{
-			di.setDelay((long)jdDialog["delay"]);
+			di.setDelay(long.Parse(jdDialog["delay"].ToString()));
 		}catch(Exception ex){
 			di.setDelay(0);
 		}
@@ -87,10 +92,19 @@ public class ReadJson {
 	/// to next dialog;
 	/// get new DialogInfo
 	/// </summary>
-	public Boolean next(){
+	public void next(){
 		if (curId < curJson ["data"].Count - 1) {
 			this.curId++;
 			this.curDialogInfo = getDialogInfo();
+		}
+	}
+
+	/// <summary>
+	/// is script finish.
+	/// </summary>
+	/// <returns><c>true</c>, if finish was ised, <c>false</c> otherwise.</returns>
+	public Boolean isFinish(){
+		if (curId >= curJson ["data"].Count - 1) {
 			return true;
 		}
 		return false;

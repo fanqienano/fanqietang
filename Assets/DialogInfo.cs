@@ -10,6 +10,7 @@ public class DialogInfo
 	private string content = string.Empty;
 	private List<Option> select = new List<Option> ();
 	private long delay = 0;
+	private string voice = string.Empty;
 
 	public override string ToString(){
 		StringBuilder sb = new StringBuilder ();
@@ -24,6 +25,8 @@ public class DialogInfo
 			writer.Write (content);
 			writer.WritePropertyName ("delay");
 			writer.Write (delay);
+			writer.WritePropertyName ("voice");
+			writer.Write (voice);
 		} else {
 			writer.WritePropertyName ("type");
 			writer.Write ("Select");
@@ -90,6 +93,16 @@ public class DialogInfo
 	public long getDelay ()
 	{
 		return delay;
+	}
+	
+	public void setVoice (string voice)
+	{
+		this.voice = voice;
+	}
+	
+	public string getVoice ()
+	{
+		return voice;
 	}
 
 }
