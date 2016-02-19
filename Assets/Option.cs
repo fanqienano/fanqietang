@@ -7,7 +7,6 @@ public class Option
 	private string option = string.Empty;
 	private string subfield = string.Empty;
 	private int tarId = 0;
-	private long delay = 0;
 	
 	public override string ToString(){
 		StringBuilder sb = new StringBuilder ();
@@ -19,8 +18,6 @@ public class Option
 		writer.Write (subfield);
 		writer.WritePropertyName ("tarId");
 		writer.Write (tarId);
-		writer.WritePropertyName ("delay");
-		writer.Write (delay);
 		writer.WriteObjectEnd ();
 		return sb.ToString();
 	}
@@ -53,16 +50,6 @@ public class Option
 	public int getTarId ()
 	{
 		return tarId;
-	}
-	
-	public void setDelay (long delay)
-	{
-		this.delay = delay;
-	}
-	
-	public long getDelay ()
-	{
-		return delay;
 	}
 
 }

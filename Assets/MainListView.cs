@@ -17,6 +17,7 @@ public class MainListView : MonoBehaviour {
 	private bool isFinish = false;
 	private long delayTime = 0;
 	private long wakeTime = 0;
+	private bool needNext = true;
 	
 	private void initExampleGameObject(){
 		mainListView = GameObject.Find("MainActivity/MainListView");
@@ -65,12 +66,9 @@ public class MainListView : MonoBehaviour {
 		selectButton.transform.GetChild (0).GetComponent<Button> ().enabled = false;
 		selectButton.transform.GetChild (1).GetComponent<Button> ().enabled = false;
 		isWaiting = false;
-		if (op.getDelay () > 0) {
-			isDelay = true;
-			delayTime = op.getDelay ();
-			wakeTime = Utils.saveWakeTimeStamp(op.getDelay ());
-		}
 		Debug.Log (op.getOption() + "|" + op.getSubfield());
+		readJson.toSubfield (op);
+		needNext = false;
 	}
 
 	// Use this for initialization
@@ -102,8 +100,9 @@ public class MainListView : MonoBehaviour {
 			Debug.Log ("CancelInvoke");
 		} else {
 			if (!isWaiting && !isDelay) {
-				readJson.next ();
+				readJson.next (needNext);
 				addItem (readJson.getCurDialogInfo ());
+				needNext = true;
 				if (readJson.getCurDialogInfo ().getType () == DialogType.Select) {
 					isWaiting = true;
 				}

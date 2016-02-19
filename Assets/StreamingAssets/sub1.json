@@ -1,0 +1,31 @@
+{
+    "gameName": "番茄汤",
+    "data": [
+        {
+            "type": 0,
+            "id": 0,
+            "content": "这是分支第一句话"
+        },
+        {
+            "type": 0,
+            "id": 1,
+            "content": "这是分支第二句话"
+        },
+        {
+            "type": 1,
+            "id": 2,
+            "select": [
+                {
+                    "option": "分支第一选项",
+                    "subfield": "main.json",
+                    "tarId": 1
+                },
+                {
+                    "option": "分支第二选项",
+                    "subfield": "main.json",
+                    "tarId": 0
+                }
+            ]
+        }
+    ]
+}

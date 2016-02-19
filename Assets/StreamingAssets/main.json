@@ -5,7 +5,6 @@
             "type": 0,
             "id": 0,
             "content": "哎呀我操你谁？",
-            "voice": "111.mp3",
             "delay": 1000
         },
         {
@@ -20,15 +19,13 @@
             "select": [
                 {
                     "option": "你管我呢？！",
-                    "subfield": "1.json",
-                    "tarId": 1,
-                    "delay": 1000
+                    "subfield": "sub1.json",
+                    "tarId": 0
                 },
                 {
                     "option": "你不觉得先介绍下自己比较好吗？",
-                    "subfield": "1.json",
-                    "tarId": 3,
-                    "delay": 1000
+                    "subfield": "sub1.json",
+                    "tarId": 1
                 }
             ]
         },
@@ -38,15 +35,13 @@
             "select": [
                 {
                     "option": "可是我就不告诉你",
-                    "subfield": "1.json",
-                    "tarId": 1,
-                    "delay": 1000
+                    "subfield": "sub1.json",
+                    "tarId": 1
                 },
                 {
                     "option": "我觉得你应该出去！",
-                    "subfield": "1.json",
-                    "tarId": 3,
-                    "delay": 1000
+                    "subfield": "sub1.json",
+                    "tarId": 2
                 }
             ]
         }

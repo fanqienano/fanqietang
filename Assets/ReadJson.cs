@@ -34,7 +34,7 @@ public class ReadJson {
 	/// </summary>
 	/// <param name="op">Op.</param>
 	public void toSubfield(Option op){
-		this.curJsonFile = Utils.PathURL + op.getSubfield();
+		this.curJsonFile = op.getSubfield();
 		this.curId = op.getTarId();
 		reloadJsonFile ();
 		this.curDialogInfo = getDialogInfo ();
@@ -53,14 +53,9 @@ public class ReadJson {
 			JsonData jdo = jdDialog["select"];
 			for (int i=0;i<jdo.Count;i++){
 				Option op = new Option();
-				op.setSubfield(jdo[i]["subfield"].ToString());
+				op.setSubfield(Utils.PathURL + jdo[i]["subfield"].ToString());
 				op.setTarId(int.Parse(jdo[i]["tarId"].ToString()));
 				op.setOption(jdo[i]["option"].ToString());
-				try{
-					op.setDelay(long.Parse(jdo[i]["delay"].ToString()));
-				}catch(Exception ex){
-					op.setDelay(0);
-				}
 				di.addOption(op);
 			}
 		} else {
@@ -92,10 +87,13 @@ public class ReadJson {
 	/// to next dialog;
 	/// get new DialogInfo
 	/// </summary>
-	public void next(){
-		if (curId < curJson ["data"].Count - 1) {
-			this.curId++;
-			this.curDialogInfo = getDialogInfo();
+	/// <param name="isNeed">If set to <c>true</c> is need.</param>
+	public void next(bool isNeed){
+		if (isNeed) {
+			if (curId < curJson ["data"].Count - 1) {
+				this.curId++;
+				this.curDialogInfo = getDialogInfo ();
+			}
 		}
 	}
 
@@ -104,7 +102,7 @@ public class ReadJson {
 	/// </summary>
 	/// <returns><c>true</c>, if finish was ised, <c>false</c> otherwise.</returns>
 	public Boolean isFinish(){
-		if (curId >= curJson ["data"].Count - 1) {
+		if (curId >= curJson ["data"].Count - 1 && curDialogInfo.getType() == DialogType.Dialog) {
 			return true;
 		}
 		return false;
