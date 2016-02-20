@@ -1,2 +1,2 @@
-﻿/Users/wufan/Unity/fanqietang/Assets/StreamingAssets/main.json
+﻿/Users/wufan/Unity/fanqietang/Assets/StreamingAssets/sub1.json
 1

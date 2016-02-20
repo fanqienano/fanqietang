@@ -20,7 +20,7 @@ public class Utils {
 	public static readonly string recordPath = PathURL + "record.txt";
 	public static readonly string wakeTimeStamp = PathURL + "wake.txt";
 	public static readonly string historyPath = PathURL + "history.txt";
-	public static readonly string splitStr = "|fanqietang|";
+	public static readonly string splitStr = "_fanqietang_";
 
 	public static string readJsonFile(string filePath) {
 		string text = File.ReadAllText(@filePath);
@@ -42,7 +42,7 @@ public class Utils {
 		if (dialogInfo.getType () == DialogType.Dialog) {
 			sw.WriteLine(dialogInfo.getContent());
 		} else {
-			sw.WriteLine(num.ToString() + splitStr + dialogInfo.getSelect()[0] + splitStr + dialogInfo.getSelect()[1]);
+			sw.WriteLine(num.ToString() + splitStr + dialogInfo.getSelect()[0].getOption() + splitStr + dialogInfo.getSelect()[1].getOption());
 		}
 		sw.Close();
 	}

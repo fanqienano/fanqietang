@@ -107,6 +107,9 @@ public class MainListView : MonoBehaviour {
 		Button buttonRight = newSelectButton.transform.GetChild (1).GetComponent<Button>();
 		buttonRight.transform.GetChild (0).GetComponent<Text> ().text = di.getSelect () [1].getOption ();
 		buttonRight.enabled = false;
+		newSelectButton.transform.SetParent (mainListViewGrid.transform);
+		newSelectButton.transform.localScale = new Vector3 (1, 1, 1);
+		newSelectButton.SetActive (true);
 	}
 
 	// Update is called once per frame
