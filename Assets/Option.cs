@@ -7,6 +7,7 @@ public class Option
 	private string option = string.Empty;
 	private string subfield = string.Empty;
 	private int tarId = 0;
+	private bool clicked = false;
 	
 	public override string ToString(){
 		StringBuilder sb = new StringBuilder ();
@@ -50,6 +51,16 @@ public class Option
 	public int getTarId ()
 	{
 		return tarId;
+	}
+	
+	public void setClicked (bool clicked)
+	{
+		this.clicked = clicked;
+	}
+	
+	public bool getClicked ()
+	{
+		return clicked;
 	}
 
 }

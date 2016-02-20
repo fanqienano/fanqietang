@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using LitJson;
 using System;
+using System.Collections.Generic;
 
 public class ReadJson {
 	private JsonData curJson;
@@ -111,8 +112,25 @@ public class ReadJson {
 	/// <summary>
 	/// save the record
 	/// </summary>
+	/// <param name="num">Number.</param>
+	public void saveRecord(int num){
+		if (this.curDialogInfo.getType() == DialogType.Select) {
+			Utils.saveRecord (this.curDialogInfo, num, this.curJsonFile, this.curId);
+		}
+	}
+
+	/// <summary>
+	/// save the record
+	/// </summary>
 	public void saveRecord(){
-		Utils.saveRecord (this.curJsonFile, this.curId);
+		if (this.curDialogInfo.getType() == DialogType.Dialog) {
+			Utils.saveRecord (this.curDialogInfo, 0, this.curJsonFile, this.curId);
+		}
+	}
+
+	public List<DialogInfo> loadHistory(){
+		List<DialogInfo> dialogInfoList = Utils.readHistory ();
+		return dialogInfoList;
 	}
 
 }

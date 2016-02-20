@@ -2,7 +2,7 @@
 using System.Collections;
 using LitJson;
 using UnityEngine.UI;
-using System.Threading;
+using System.Collections.Generic;
 
 public class MainListView : MonoBehaviour {
 
@@ -50,21 +50,22 @@ public class MainListView : MonoBehaviour {
 		Button buttonLeft = newSelectButton.transform.GetChild (0).GetComponent<Button>();
 		buttonLeft.transform.GetChild (0).GetComponent<Text> ().text = di.getSelect () [0].getOption ();
 		buttonLeft.onClick.AddListener (delegate() {
-			this.clickButton (newSelectButton, di.getSelect () [0]); 
+			this.clickButton (newSelectButton, di.getSelect () [0], 0); 
 		});
 		Button buttonRight = newSelectButton.transform.GetChild (1).GetComponent<Button>();
 		buttonRight.transform.GetChild (0).GetComponent<Text> ().text = di.getSelect () [1].getOption ();
 		buttonRight.onClick.AddListener (delegate() {
-			this.clickButton (newSelectButton, di.getSelect () [1]); 
+			this.clickButton (newSelectButton, di.getSelect () [1], 1); 
 		});
 		newSelectButton.transform.SetParent (mainListViewGrid.transform);
 		newSelectButton.transform.localScale = new Vector3 (1, 1, 1);
 		newSelectButton.SetActive (true);
 	}
 
-	private void clickButton(GameObject selectButton, Option op){
+	private void clickButton(GameObject selectButton, Option op, int num){
 		selectButton.transform.GetChild (0).GetComponent<Button> ().enabled = false;
 		selectButton.transform.GetChild (1).GetComponent<Button> ().enabled = false;
+		readJson.saveRecord(num);
 		isWaiting = false;
 		Debug.Log (op.getOption() + "|" + op.getSubfield());
 		readJson.toSubfield (op);
@@ -76,8 +77,36 @@ public class MainListView : MonoBehaviour {
 		initExampleGameObject ();
 		InvokeRepeating("loadDialogInvoke", 1, 1f); //time, 1s later, 1s repeat
 		readJson = new ReadJson ();
-		addItem (readJson.getCurDialogInfo ());
+		loadHistory ();
 		Debug.Log ("start over");
+	}
+
+	private void loadHistory(){
+		List<DialogInfo> historyList = readJson.loadHistory ();
+		if (historyList.Count > 0) {
+			Debug.Log("has history");
+			foreach (DialogInfo di in historyList){
+				if (di.getType() == DialogType.Dialog){
+					addTextItem (di);
+				}else{
+					addHistoryButton(di);
+				}
+			}
+		} else {
+			Debug.Log("no history");
+			addItem (readJson.getCurDialogInfo ());
+			readJson.saveRecord();
+		}
+	}
+
+	private void addHistoryButton(DialogInfo di){
+		GameObject newSelectButton = Instantiate(selectButtonExample);
+		Button buttonLeft = newSelectButton.transform.GetChild (0).GetComponent<Button>();
+		buttonLeft.transform.GetChild (0).GetComponent<Text> ().text = di.getSelect () [0].getOption ();
+		buttonLeft.enabled = false;
+		Button buttonRight = newSelectButton.transform.GetChild (1).GetComponent<Button>();
+		buttonRight.transform.GetChild (0).GetComponent<Text> ().text = di.getSelect () [1].getOption ();
+		buttonRight.enabled = false;
 	}
 
 	// Update is called once per frame
@@ -102,6 +131,7 @@ public class MainListView : MonoBehaviour {
 			if (!isWaiting && !isDelay) {
 				readJson.next (needNext);
 				addItem (readJson.getCurDialogInfo ());
+				readJson.saveRecord();
 				needNext = true;
 				if (readJson.getCurDialogInfo ().getType () == DialogType.Select) {
 					isWaiting = true;
