@@ -18,6 +18,7 @@ public class MainListView : MonoBehaviour {
 	private long delayTime = 0;
 	private long wakeTime = 0;
 	private bool needNext = true;
+	private AudioSource audioSource;
 	
 	private void initExampleGameObject(){
 		mainListView = GameObject.Find("MainActivity/MainListView");
@@ -27,7 +28,18 @@ public class MainListView : MonoBehaviour {
 		selectButtonExample.SetActive (false);
 	}
 
+	public void playVideo(string str){
+		if (audioSource.isPlaying){
+			audioSource.Stop();
+		}
+		audioSource.clip = (AudioClip)Resources.Load(str, typeof(AudioClip));//调用Resources方法加载AudioClip资源
+		audioSource.Play();
+	}
+
 	private void addItem(DialogInfo di){
+		if (!di.getVoice ().Equals (string.Empty)) {
+			playVideo(di.getVoice ());
+		}
 		if (di.getType() == DialogType.Dialog) {
 			addTextItem (di);
 		} else {
@@ -63,6 +75,9 @@ public class MainListView : MonoBehaviour {
 	}
 
 	private void clickButton(GameObject selectButton, Option op, int num){
+		if (audioSource.isPlaying){
+			audioSource.Stop();
+		}
 		selectButton.transform.GetChild (0).GetComponent<Button> ().enabled = false;
 		selectButton.transform.GetChild (1).GetComponent<Button> ().enabled = false;
 		readJson.saveRecord(num);
@@ -76,6 +91,7 @@ public class MainListView : MonoBehaviour {
 	void Start () {
 		initExampleGameObject ();
 		InvokeRepeating("loadDialogInvoke", 1, 1f); //time, 1s later, 1s repeat
+		audioSource = gameObject.AddComponent<AudioSource>();
 		readJson = new ReadJson ();
 		loadHistory ();
 		Debug.Log ("start over");

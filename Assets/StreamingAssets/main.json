@@ -5,13 +5,15 @@
             "type": 0,
             "id": 0,
             "content": "哎呀我操你谁？",
-            "delay": 1000
+            "delay": 1000,
+            "voice": "Zzz"
         },
         {
             "type": 0,
             "id": 1,
             "content": "你为什么也在这里？",
-            "delay": 1000
+            "delay": 10000,
+            "voice": "Zzz"
         },
         {
             "type": 1,

@@ -63,7 +63,7 @@ public class ReadJson {
 			di.setType (DialogType.Dialog);
 			di.setContent (jdDialog ["content"].ToString());
 			try{
-				di.setVoice(Utils.getVoicePath(jdDialog["voice"].ToString()));
+				di.setVoice(jdDialog["voice"].ToString());
 			}catch(Exception ex){
 				di.setVoice(string.Empty);
 			}
